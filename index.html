@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cura Interior — Autoconhecimento & Relacionamentos</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #FAF6EF;
+    --card: #FFFFFF;
+    --ink: #2A2320;
+    --sub: #6B5F55;
+    --gold: #B8863B;
+    --orange: #C2703D;
+    --red: #B23A2F;
+    --green: #4E7A51;
+    --line: #E7DCC9;
+    --cream: #F3E7D8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 28px 20px 60px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  header.top { text-align: center; margin-bottom: 28px; }
+  header.top .eyebrow { color: var(--gold); font-weight: 700; letter-spacing: 1.5px; font-size: 12px; text-transform: uppercase; }
+  header.top h1 { font-size: 26px; margin: 6px 0 4px; }
+  header.top .sub { color: var(--sub); font-size: 14px; }
+  .statrow { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+  .stat { flex: 1; min-width: 140px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; text-align: center; }
+  .stat .num { font-size: 24px; font-weight: 800; color: var(--orange); }
+  .stat .lbl { font-size: 11px; color: var(--sub); text-transform: uppercase; letter-spacing: .5px; margin-top: 2px; }
+  .theme-card { background: linear-gradient(135deg, #2A2320, #40342C); color: #F3E7D8; border-radius: 16px; padding: 20px 22px; margin-bottom: 26px; }
+  .theme-card .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #D8B87C; font-weight: 700; }
+  .theme-card h2 { margin: 6px 0 4px; font-size: 20px; }
+  .theme-card p { margin: 0; font-size: 13px; color: #D9CFC2; }
+  .progress-outer { background: #EFE3D0; border-radius: 999px; height: 10px; overflow: hidden; margin: 12px 0 4px; }
+  .progress-inner { background: var(--green); height: 100%; border-radius: 999px; transition: width .3s; }
+  h3.section { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); margin: 30px 0 12px; font-weight: 800; }
+  .day-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; }
+  .day-card.done { border-color: var(--green); background: #F3F8F3; }
+  .day-head { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .day-head-left { display: flex; align-items: center; gap: 10px; }
+  .day-badge { width: 34px; height: 34px; border-radius: 50%; background: var(--cream); color: var(--orange); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0; }
+  .day-card.done .day-badge { background: var(--green); color: #fff; }
+  .day-title { font-weight: 700; font-size: 15px; }
+  .day-sci { font-size: 12px; color: var(--sub); }
+  .chev { color: var(--sub); font-size: 12px; transition: transform .2s; }
+  .day-card.open .chev { transform: rotate(180deg); }
+  .day-body { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line); }
+  .day-card.open .day-body { display: block; }
+  .quote { font-style: italic; background: var(--cream); border-left: 3px solid var(--gold); padding: 10px 14px; border-radius: 6px; font-size: 13.5px; margin: 10px 0; }
+  .quote small { display: block; font-style: normal; color: var(--sub); margin-top: 4px; }
+  .exp-title { font-weight: 700; font-size: 13px; margin-top: 12px; }
+  .exp-text { font-size: 13.5px; color: #4A4038; line-height: 1.5; }
+  .mini-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .4px; color: var(--green); margin-top: 12px; margin-bottom: 4px; }
+  .apply { font-size: 13.5px; color: #4A4038; line-height: 1.5; margin-top: 10px; background: #FBF8F2; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); }
+  .apply b { color: var(--orange); }
+  .checklist { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+  .check-item input { width: 16px; height: 16px; accent-color: var(--green); }
+  .check-item.checked span { text-decoration: line-through; color: var(--sub); }
+  .repertoire-box { margin-top: 14px; background: #EFF5F2; border: 1px solid #CFE3D8; border-radius: 10px; padding: 12px 14px; }
+  .repertoire-box .rep-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .repertoire-cat { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--green); background: #DCEEDF; padding: 2px 8px; border-radius: 999px; }
+  .repertoire-title { font-weight: 700; font-size: 13px; margin-top: 8px; }
+  .repertoire-text { font-size: 12.5px; color: #4A4038; line-height: 1.5; margin-top: 4px; }
+  .rep-check { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--sub); cursor: pointer; margin-top: 8px; }
+  .rep-check input { width: 14px; height: 14px; accent-color: var(--green); }
+  .rep-check.checked span { text-decoration: line-through; }
+  .friday { background: var(--card); border: 2px solid var(--orange); border-radius: 14px; padding: 18px 20px; margin-top: 8px; }
+  .friday-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .badge-status { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: .5px; }
+  .badge-ready { background: #E4F0E5; color: var(--green); }
+  .badge-wait { background: #F3E7D8; color: var(--orange); }
+  .script-card { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-top: 12px; }
+  .script-top { display: flex; justify-content: space-between; gap: 10px; cursor: pointer; }
+  .script-type { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #fff; background: var(--orange); padding: 2px 8px; border-radius: 999px; }
+  .script-title { font-weight: 700; font-size: 14.5px; margin-top: 6px; }
+  .script-hook { font-size: 13px; color: var(--sub); margin-top: 4px; }
+  .script-body { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 13.5px; line-height: 1.6; color: #4A4038; }
+  .script-card.open .script-body { display: block; }
+  .cut { color: var(--red); font-weight: 700; font-style: italic; font-size: 12.5px; margin: 8px 0; }
+  .cta-box { background: var(--cream); border: 1px solid var(--gold); border-radius: 8px; padding: 10px 12px; margin: 10px 0; font-size: 13px; }
+  .cta-box b { color: var(--orange); }
+  .thumb-box { background: #F3F0EA; border-radius: 8px; padding: 10px 12px; font-size: 12.5px; color: var(--sub); }
+  table.history { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+  table.history th { text-align: left; color: var(--sub); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  table.history td { padding: 10px 8px; border-bottom: 1px solid var(--line); }
+  table.history tbody tr { cursor: pointer; transition: background .15s; }
+  table.history tbody tr:hover { background: var(--cream); }
+  table.history tbody tr.viewing { background: var(--cream); }
+  #historyBanner { background: var(--cream); border: 1px solid var(--gold); border-radius: 999px; padding: 6px 14px; display: inline-block; }
+  #historyBanner a { color: var(--orange); cursor: pointer; text-decoration: underline; font-weight: 700; }
+  .pill { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+  .pill-ok { background: #E4F0E5; color: var(--green); }
+  .pill-mid { background: #FBEFD9; color: var(--orange); }
+  .ebook-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+  @media (max-width: 620px) { .ebook-grid { grid-template-columns: 1fr; } }
+  .ebook-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; position: relative; }
+  .ebook-card.next { border-color: var(--orange); }
+  .ebook-tag { position: absolute; top: -9px; right: 12px; background: var(--orange); color: #fff; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 999px; }
+  .ebook-title { font-weight: 700; font-size: 13.5px; }
+  .ebook-pitch { font-size: 12.5px; color: var(--sub); margin-top: 4px; }
+  footer.note { margin-top: 34px; font-size: 12px; color: var(--sub); text-align: center; line-height: 1.6; }
+  footer.note .disclaimer { display: block; margin-top: 10px; font-size: 11px; color: var(--sub); opacity: .85; }
+  button.reset { display: block; margin: 18px auto 0; background: none; border: 1px solid var(--line); color: var(--sub); font-size: 11px; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Sistema de Conteúdo · Autoconhecimento &amp; Cura Interior</div>
+    <h1 id="weekTitle">Semana 1</h1>
+    <div class="sub" id="weekDates"></div>
+    <div id="historyBanner" style="display:none;margin-top:8px;font-size:12px;"></div>
+    <div class="sub" id="syncStatus" style="margin-top:6px;font-size:11px;">⏳ conectando...</div>
+    <button class="reset" id="refreshBtn" style="margin-top:8px;">🔄 Atualizar de outro aparelho</button>
+  </header>
+  <div class="statrow">
+    <div class="stat"><div class="num" id="statDaysWeek">0/5</div><div class="lbl">Dias estudados essa semana</div></div>
+    <div class="stat"><div class="num" id="statStreak">0</div><div class="lbl">Semanas completas seguidas</div></div>
+    <div class="stat"><div class="num" id="statTotalDays">0</div><div class="lbl">Estudos concluídos no total</div></div>
+    <div class="stat"><div class="num" id="statScripts">0</div><div class="lbl">Roteiros gerados no total</div></div>
+  </div>
+  <div class="theme-card">
+    <div class="lbl">Tema da semana</div>
+    <h2 id="themeTitle"></h2>
+    <p id="themeDesc"></p>
+    <div class="progress-outer"><div class="progress-inner" id="weekProgressBar" style="width:0%"></div></div>
+  </div>
+  <h3 class="section">Autoconhecimento diário · 20 minutos</h3>
+  <div id="days"></div>
+  <h3 class="section">Roteiros de sexta · TikTok &amp; Instagram (2 min) · gravar sábado</h3>
+  <div id="fridayBlock"></div>
+  <h3 class="section">Seus e-books · rotação de CTA</h3>
+  <div class="ebook-grid" id="ebookGrid"></div>
+  <h3 class="section">Evolução</h3>
+  <div class="sub" style="margin:-8px 0 10px;font-size:12px;">Clique em uma semana pra ver o conteúdo completo dela.</div>
+  <table class="history">
+    <thead><tr><th>Semana</th><th>Tema</th><th>Estudo</th><th>Roteiros</th></tr></thead>
+    <tbody id="historyBody"></tbody>
+  </table>
+  <footer class="note">
+    Segunda a sexta chega um novo estudo automaticamente. Sexta, os 3 roteiros da semana são gerados aqui.<br>
+    Marque cada etapa conforme for estudando — isso fica salvo neste dispositivo.
+    <span class="disclaimer">Conteúdo educativo, baseado em terapeutas e pesquisadores reais — não substitui terapia. Se algum tema aqui mexer forte demais com você, procure apoio profissional.</span>
+  </footer>
+  <button class="reset" onclick="if(confirm('Apagar todo o progresso salvo (em todos os aparelhos sincronizados)?')){localStorage.removeItem(LS_KEY);saveProgress({});render();}">Zerar progresso salvo</button>
+</div>
+<script>
+// ============ DATA — atualizado pelo Claude a cada semana ============
+const WEEKS = [
+  {
+    number: 1,
+    theme: "Você não tem “personalidade difícil”. Tem um sistema nervoso que aprendeu cedo demais a se proteger — e ninguém te ensinou a desligar o alarme",
+    themeDesc: "Base: inteligência emocional (Goleman), teoria do apego (Bowlby), lealdades invisíveis da família (Hellinger), trauma guardado no corpo (van der Kolk) e comunicação não-violenta (Rosenberg).",
+    dateRange: "07–11 set 2026 · gravação sábado 12 set",
+    days: [
+      {
+        day: "Segunda", date: "07 set",
+        scientist: "Daniel Goleman",
+        topic: "Inteligência emocional não é ser bonzinho — é saber o que você sente antes que a boca fale sozinha",
+        quote: "Em certo sentido, temos dois cérebros, duas mentes — e duas formas diferentes de inteligência: a racional e a emocional. Nosso desempenho na vida é determinado por ambas.",
+        quoteNote: "citação real de Daniel Goleman, “Inteligência Emocional” (1995)",
+        scientistBio: "Daniel Goleman é psicólogo americano, PhD por Harvard, e trabalhou por mais de uma década como jornalista científico do The New York Times cobrindo cérebro e comportamento. Ele não inventou o conceito — pegou uma teoria acadêmica pouco conhecida de Peter Salovey e John Mayer (1990) e a transformou no best-seller “Inteligência Emocional” (1995), best-seller mundial, definindo 5 competências: autoconsciência, autorregulação, motivação, empatia e habilidade social.",
+        experimentTitle: "O teste do marshmallow (Walter Mischel, Stanford, 1970–1972)",
+        method: "Crianças pequenas (4-5 anos), na Bing Nursery School de Stanford, recebiam um marshmallow na mesa e uma proposta: comer agora, ou esperar sozinhas na sala por cerca de 15 minutos e ganhar dois. Mischel e sua equipe filmavam as crianças tentando resistir — tampando os olhos, cantando, sentando em cima das próprias mãos — e, décadas depois, fizeram estudos de acompanhamento com parte desses mesmos participantes já adultos.",
+        experimentText: "Goleman usa esse experimento como prova-símbolo de que autorregulação emocional prediz mais a vida adulta do que QI sozinho — crianças que esperaram mais tiveram, em estudos de seguimento (Shoda, Mischel & Peake, 1990), notas e ajuste social melhores anos depois. Mas — e isso é importante, porque ciência de verdade não é conto de fada — uma réplica bem maior e mais recente (Watts, Duncan & Quan, 2018) mostrou que boa parte desse efeito desaparece quando você controla pela renda da família. Autorregulação importa, sim; só não é a explicação sozinha que viralizou por aí.",
+        apply: "Sua tarefa não é “controlar a emoção”. É colocar 2 segundos de nome nela antes de agir — é isso que Goleman chama de autoconsciência, e é treinável. Reação no piloto automático (fraca): alguém te corta na conversa, você já sai na defensiva ou já sai de fininho, e só entende o que sentiu 3 horas depois, sozinha, remoendo. Reação com pausa (forte): no momento, você nomeia por dentro — “isso é raiva, ou é vergonha de ter sido interrompida?” — e só depois decide o que fazer com a resposta. Não precisa acertar o nome certo da emoção de primeira. Precisa só parar de reagir pro sentimento que você nem identificou ainda.",
+        repertoire: {
+          category: "Ciência",
+          title: "O polvo que muda de cor sem ver a própria pele",
+          text: "Polvos e lulas conseguem mudar de cor e textura pra se camuflar em frações de segundo — e por muito tempo os cientistas assumiam que isso dependia só dos olhos. Um estudo de 2015 encontrou fotorreceptores (as mesmas proteínas sensíveis à luz dos olhos) espalhados pela própria pele desses animais, sugerindo que o corpo deles “vê” luz e cor por conta própria, além do que os olhos captam — um sistema sensorial redundante que a ciência ainda não entende totalmente.",
+        },
+      },
+      {
+        day: "Terça", date: "08 set",
+        scientist: "John Bowlby",
+        topic: "Apego — o jeito que você ama hoje foi ensaiado antes de você ter memória pra lembrar",
+        quote: "O apego a figuras específicas é a base a partir da qual uma criança sai para explorar o mundo — e para onde ela pode voltar sabendo que será bem recebida.",
+        quoteNote: "ideia central de John Bowlby, resumida de “Attachment and Loss” (1969)",
+        scientistBio: "John Bowlby (1907–1990) foi psiquiatra e psicanalista britânico, formado em Cambridge, e trabalhou na Tavistock Clinic, em Londres. Rompeu com boa parte da psicanálise da época ao defender, com base em observação direta de crianças separadas dos pais (inclusive as evacuadas de Londres na 2ª Guerra), que o vínculo com um cuidador não é “mimo” nem dependência a ser cortada — é uma necessidade biológica tão real quanto fome ou sono. Publicou a trilogia “Attachment and Loss” (1969, 1973, 1980).",
+        experimentTitle: "A Situação Estranha (Mary Ainsworth, 1969 — consolidada em “Patterns of Attachment”, 1978)",
+        method: "Publicado a partir de observações em Uganda e depois em Baltimore, o protocolo colocava um bebê e a mãe numa sala com brinquedos; uma estranha entrava; a mãe saía por alguns minutos e depois voltava. Os pesquisadores filmavam e codificavam, principalmente, o comportamento do bebê no reencontro com a mãe — não a reação à separação em si.",
+        experimentText: "Bebês com apego seguro protestavam a saída, mas se acalmavam rápido no reencontro e voltavam a explorar o ambiente. Bebês com apego ansioso ficavam grudados e não se acalmavam fácil mesmo com a mãe de volta. Bebês com apego evitativo pareciam “não ligar” — ignoravam a mãe no retorno — mas exames de frequência cardíaca mostraram que o estresse interno deles era tão alto quanto o dos outros grupos; só não aparecia de fora. O padrão de apego prediz, com razoável consistência em estudos posteriores, como essa mesma pessoa vai se comportar em relacionamentos adultos décadas depois.",
+        apply: "Seu estilo de apego não é personalidade, é uma estratégia de sobrevivência que fez sentido com quem cuidou de você — e continua rodando mesmo quando não faz mais sentido nenhum. Modo piloto automático (fraco): você manda 4 mensagens seguidas e some se não responderem rápido (ansioso), ou já começa a se afastar assim que alguém chega perto de verdade (evitativo) — e chama isso de “é assim mesmo que eu sou”. Modo com consciência (forte): perceber o padrão em tempo real e nomear pro outro, em vez de agir — “percebi que fico ansiosa quando você demora a responder, isso é meu, não é sobre você” — muda a relação de defesa automática pra escolha consciente.",
+        repertoire: {
+          category: "História",
+          title: "A carta que nunca foi enviada e mudou uma guerra",
+          text: "Durante a Crise dos Mísseis de Cuba, em outubro de 1962, o líder soviético Nikita Khrushchov enviou duas cartas em sequência a Kennedy — uma conciliadora, outra mais dura. A equipe de Kennedy decidiu, deliberadamente, ignorar a segunda carta e responder só à primeira, mais branda, como se a outra não tivesse chegado. Essa escolha de comunicação — responder ao melhor argumento, não ao pior — é apontada por historiadores como um dos fatores que ajudou a evitar uma guerra nuclear.",
+        },
+      },
+      {
+        day: "Quarta", date: "09 set",
+        scientist: "Bert Hellinger",
+        topic: "Constelação familiar — às vezes você carrega um peso que nem é seu, só porque alguém antes de você não pôde carregar",
+        quote: "O amor cego busca fazer o que os outros da família fizeram, mesmo que doa — o amor que vê consegue honrar o destino de quem veio antes sem precisar repeti-lo.",
+        quoteNote: "ideia central de Bert Hellinger, resumida de seus escritos sobre as “ordens do amor”",
+        scientistBio: "Bert Hellinger (1925–2019) foi psicoterapeuta alemão, ex-missionário católico que viveu 16 anos na África do Sul antes de virar terapeuta. A partir da década de 1980, criou o método das Constelações Familiares, misturando terapia sistêmica, psicodrama e observações próprias sobre como padrões (segredos, exclusões, mortes precoces) se repetem entre gerações de uma mesma família — mesmo quando ninguém fala sobre eles abertamente.",
+        experimentTitle: "O método das Constelações Familiares",
+        method: "Numa sessão em grupo, a pessoa escolhe, entre os presentes, “representantes” pra si e pra membros da própria família (vivos ou mortos), e os posiciona fisicamente na sala, por instinto, sem explicar o motivo. Hellinger observava que os representantes, mesmo sem saber nada da história real da família, relatavam sentir emoções e impulsos físicos condizentes com a pessoa real que estavam representando — e a partir desse mapa espacial, o terapeuta busca identificar lealdades invisíveis ou membros excluídos da história da família.",
+        experimentText: "É importante ser direta aqui: constelação familiar não tem o mesmo tipo de evidência controlada que os outros estudos desta semana — a ciência ainda debate como (e se) o fenômeno dos representantes acontece, e associações profissionais de psicologia pedem cautela quanto a tratá-la como terapia comprovada pra quadros clínicos sérios. O que tem valor prático, mesmo pra quem é cética com o método: a pergunta que ele te obriga a fazer. “Esse padrão que eu repito — é meu, ou é de alguém antes de mim que eu nunca conheci?”",
+        apply: "Não precisa acreditar em campo mórfico pra usar a pergunta central da constelação. Padrão sem pergunta (fraco): você repete a mesma dinâmica de relacionamento pela 3ª vez e conclui “deve ser azar” ou “homem/mulher é tudo igual mesmo”. Padrão com pergunta (forte): você escreve, sem filtro, a resposta de “de quem eu aprendi que amor é isso?” — mãe, pai, avó — e olha se está repetindo o script de alguém que nem escolheu esse script, só passou adiante porque foi o que teve. Você pode ser a primeira da linha a colocar isso em cima da mesa.",
+        repertoire: {
+          category: "Astronomia",
+          title: "A estrela que já morreu, mas você ainda vê brilhando",
+          text: "Quando você olha uma estrela distante no céu, a luz que chega aos seus olhos pode ter saído dela centenas ou milhares de anos atrás — é literalmente o passado que você está vendo. Isso significa que algumas das estrelas visíveis a olho nu, tecnicamente, já podem não existir mais: a luz continua viajando pelo espaço muito depois de a fonte ter se apagado.",
+        },
+      },
+      {
+        day: "Quinta", date: "10 set",
+        scientist: "Bessel van der Kolk",
+        topic: "O corpo guarda o placar — trauma não fica só na lembrança, fica no músculo, na respiração, no sobressalto",
+        quote: "O corpo guarda o placar: se a experiência traumática for ignorada ou negada, ela se manifesta no corpo, mesmo décadas depois.",
+        quoteNote: "ideia central de Bessel van der Kolk em “O Corpo Guarda as Marcas” (“The Body Keeps the Score”, 2014)",
+        scientistBio: "Bessel van der Kolk é psiquiatra holandês radicado nos EUA, professor na Boston University School of Medicine e fundador do Trauma Center em Boston. Começou a carreira tratando veteranos de guerra na década de 1970 e passou décadas usando neuroimagem pra entender o que acontece no cérebro de quem viveu um trauma — e por que “só conversar sobre o que aconteceu” muitas vezes não é suficiente pra curar.",
+        experimentTitle: "O estudo de imagem cerebral durante revivência do trauma (Rauch, van der Kolk e equipe, Archives of General Psychiatry, 1996)",
+        method: "Usando PET scan (tomografia por emissão de pósitrons), van der Kolk e colaboradores escaneavam o cérebro de pessoas com transtorno de estresse pós-traumático enquanto elas ouviam uma narração, gravada com a própria voz, descrevendo um episódio traumático específico que já tinham vivido — comparando essa atividade cerebral com a de quando ouviam uma narração neutra.",
+        experimentText: "Durante a revivência do trauma, a área de Broca (ligada à capacidade de colocar experiência em palavras) reduzia atividade, enquanto a amígdala (alarme de ameaça) e regiões do hemisfério direito ligadas a sensação física disparavam. Ou seja: no momento do gatilho, a parte do cérebro que “fala sobre” literalmente perde força, e o corpo reage como se o perigo estivesse acontecendo agora — não como uma lembrança arquivada no passado.",
+        apply: "Isso explica por que só “racionalizar” um gatilho raramente resolve — ele não é vivido pelo cérebro como memória, é vivido como ameaça presente. Reação de quem só tenta pensar (fraco): “eu sei que isso é bobagem, eu sei que já passou, por que eu ainda travo?” — e a cobrança em cima de si mesma piora o travamento. Reação de quem trabalha com o corpo (forte): no momento do gatilho, antes de qualquer análise, fazer algo físico que avisa ao corpo que o perigo passou — respiração longa, os pés no chão, olhar 5 objetos ao redor e nomear em voz alta. Isso não substitui terapia com profissional qualificado, principalmente se o gatilho for forte ou frequente — é só o primeiro passo pra sair do modo alarme antes de conseguir pensar em qualquer outra coisa.",
+        repertoire: {
+          category: "Ciência",
+          title: "A árvore que é, na real, milhares de árvores com uma raiz só",
+          text: "No estado de Utah, EUA, existe um bosque de álamos chamado Pando que, à primeira vista, parece milhares de árvores separadas — mas é, geneticamente, um único organismo, todos os troncos brotando do mesmo sistema de raízes. Estima-se que tenha mais de 80 mil anos e pese coletivamente cerca de 6 mil toneladas, tornando-o um dos organismos vivos mais antigos e mais pesados já identificados no planeta.",
+        },
+      },
+      {
+        day: "Sexta", date: "11 set",
+        scientist: "Marshall Rosenberg",
+        topic: "Comunicação não-violenta — a diferença entre “você nunca me escuta” e dizer o que você sente de verdade",
+        quote: "Acredito que somos todos treinados desde a infância a nos expressarmos e a ouvir os outros de forma impessoal, que gera dor e violência.",
+        quoteNote: "ideia central de Marshall Rosenberg, no espírito do que escreve em “Comunicação Não-Violenta” (1999) — resumida, não tradução literal da edição brasileira",
+        scientistBio: "Marshall Rosenberg (1934–2015) foi psicólogo americano, doutorado pela Universidade de Wisconsin, aluno do próprio Carl Rogers. A partir da década de 1960, atuando em mediação de conflitos raciais e escolares nos EUA, desenvolveu o método da Comunicação Não-Violenta (CNV) — um jeito estruturado de falar que separa observação, sentimento, necessidade e pedido, criado justamente pra reduzir a chance de a outra pessoa ouvir acusação onde você só queria dizer o que sente.",
+        experimentTitle: "O método CNV nas mediações de Rosenberg (décadas de 1960–2000)",
+        method: "Rosenberg não fez um experimento de laboratório clássico — construiu e refinou o método na prática, mediando conflitos reais (gangues, escolas segregadas, disputas de casal) por décadas, documentando quais estruturas de fala reduziam a escalada de conflito e quais aumentavam. A estrutura formal do método (observação sem julgamento → sentimento → necessidade → pedido claro) foi testada e ajustada nesse contato direto e contínuo com conflito real, não num único estudo publicado.",
+        experimentText: "O achado central, repetido em praticamente todo relato de mediação de Rosenberg: frases que misturam observação com julgamento (“você é egoísta”) quase sempre geram defesa ou contra-ataque na outra pessoa; frases que separam o fato do sentimento e da necessidade (“quando você chega depois do combinado, eu sinto ansiedade, porque preciso me sentir prioridade”) reduzem drasticamente a chance de a conversa virar briga — porque a outra pessoa não precisa se defender de uma acusação, só responder a um sentimento.",
+        apply: "Comunicação no automático (fraco): “Você nunca me escuta” — isso é acusação disfarçada de frase, e o outro lado só tem duas saídas: se defender ou revidar. Comunicação estruturada (forte): “Quando eu falo e você mexe no celular (fato, sem julgamento), eu sinto que não importo (sentimento), porque preciso me sentir ouvida (necessidade) — você consegue guardar o celular 10 minutos enquanto eu falo? (pedido claro e possível)”. Parece robótico no papel. Na prática, é a diferença entre uma conversa que vira parede e uma que vira ponte.",
+        repertoire: {
+          category: "História",
+          title: "O tratado de paz mais curto (e mais ignorado) da história",
+          text: "Em 1928, 15 países assinaram o Pacto Briand-Kellogg, um tratado internacional que simplesmente declarava a guerra ilegal como instrumento de política nacional — sem nenhum mecanismo de punição pra quem descumprisse. Foi amplamente descumprido nos anos seguintes (incluindo pela 2ª Guerra Mundial), mas seu texto acabou servindo de base legal, décadas depois, para os julgamentos de Nuremberg contra crimes de guerra.",
+        },
+      },
+    ],
+    scriptsReady: true,
+    scripts: [
+      {
+        type: "Caso Histórico",
+        title: "As crianças romenas que a ciência usou pra provar que amor não é luxo, é sobrevivência",
+        hook: "Na Romênia dos anos 80, milhares de bebês cresceram em berçário, sem colo. Anos depois, o cérebro deles mostrou o preço disso — no exame.",
+        ebook: "Chega — de uma vida sem graça",
+        body: [
+          "GANCHO (0:00–0:10): Romênia, décadas de 1980 e 90. Milhares de bebês em orfanatos superlotados — trocados, alimentados, mas quase sem colo, sem contato olho no olho. Décadas depois, cientistas escanearam o cérebro dessas crianças. E o que apareceu ali mudou pra sempre como a gente entende afeto.",
+          "CUT::Corte rápido — imagem documental de berçário em fileira",
+          "O estudo chama Bucharest Early Intervention Project — pesquisadores como Charles Nelson e Charles Zeanah compararam crianças que ficaram no orfanato com outras que foram pra família adotiva ainda pequenas.",
+          "Quem ficou institucionalizado por mais tempo mostrou, no exame, áreas do cérebro fisicamente menores — ligadas a emoção e atenção. Quanto mais cedo a criança saía pra uma família com colo de verdade, mais o cérebro se recuperava.",
+          "CUT::Texto na tela: “COLO NÃO É MIMO. É DESENVOLVIMENTO.”",
+          "APLICAÇÃO REAL: Isso não é só sobre orfanato. É sobre a ideia, ainda comum, de que criança “só precisa de comida e teto” — e afeto é enfeite. A ciência mostra o oposto: falta de vínculo muda estrutura física de cérebro em formação.",
+          "CTA::Chega — de uma vida sem graça::E se você cresceu tendo que se virar sozinha emocionalmente cedo demais, faz sentido que hoje seja difícil desacelerar e sentir — não é falha sua, é biologia se ajustando tarde. O “Chega” te ajuda a sair do automático com estrutura, não força de vontade. Link na descrição.",
+          "FECHAMENTO: Comenta “colo” se isso te fez pensar em alguém da sua infância.",
+          "THUMB::Foto documental estilizada de berço vazio + texto grande “ISSO MUDA O CÉREBRO DE UMA CRIANÇA”.",
+        ],
+      },
+      {
+        type: "Tendência",
+        title: "Você não tem “apego ansioso”. Você só nunca ouviu falar de Mary Ainsworth",
+        hook: "O TikTok te ensinou 4 palavras de apego numa tarde. A cientista que descobriu isso passou anos filmando bebê com a mãe. Deixa eu contar direito.",
+        ebook: "Acorde Cedo — Método Lucidez",
+        body: [
+          "GANCHO (0:00–0:10): Toda semana alguém me manda “descobri que tenho apego ansioso” baseado num vídeo de 15 segundos. Ótimo que o assunto viralizou. Só que quase ninguém conta de onde veio isso de verdade — e o estudo original é bem mais interessante que o resumo de rede social.",
+          "CUT::Texto na tela: “DE ONDE VEIO ISSO, AFINAL?”",
+          "Chama Situação Estranha, criada por Mary Ainsworth nos anos 60/70, colaboradora de John Bowlby. Ela colocava bebê e mãe numa sala, a mãe saía uns minutos, voltava — e filmava a reação NO REENCONTRO, não no choro da saída.",
+          "Bebê seguro se acalmava rápido. Bebê ansioso continuava grudado, sem se acalmar nem com a mãe de volta. Bebê evitativo parecia nem ligar — só que o coração dele, medido, disparava igual por dentro. Só não aparecia.",
+          "CUT::Corte — comparação visual dos 3 padrões, um texto curto pra cada",
+          "APLICAÇÃO REAL: O ponto não é o rótulo. É que o padrão de apego não é “jeito de ser” — é estratégia que fez sentido com quem cuidou de você, e continua rodando hoje mesmo sem sentido. Rótulo de TikTok sem essa parte é só horóscopo com palavra difícil.",
+          "CTA::Acorde Cedo — Método Lucidez::E se seu padrão é chegar exausta até pra sentir isso direito, o problema pode nem ser emocional, pode ser hora errada do dia — “Acorde Cedo” te ajuda a achar seu horário real de energia, pelo cronotipo. Link aqui embaixo.",
+          "FECHAMENTO: Comenta qual dos 3 você reconheceu em você — seguro, ansioso ou evitativo.",
+          "THUMB::Split screen: print de celular estilo TikTok de um lado, foto em preto e branco de estudo científico do outro + texto “A CIÊNCIA POR TRÁS DO TREND”.",
+        ],
+      },
+      {
+        type: "Caso Histórico",
+        title: "A paciente que inventou sozinha a “cura pela fala” — e nunca recebeu crédito por isso",
+        hook: "Ela batizou o próprio tratamento de “limpeza de chaminé”. O médico levou o crédito. Ela virou uma das maiores ativistas sociais da Europa. Essa história é real.",
+        ebook: "Divorciei! E agora?",
+        body: [
+          "GANCHO (0:00–0:10): Viena, 1880. Uma paciente de 21 anos, paralisia sem causa física, alucinações, dor que os médicos não explicavam. O tratamento que ela mesma criou, na hora, virou a base da psicoterapia moderna. E quase ninguém sabe o nome dela.",
+          "CUT::Texto na tela: “ELA CRIOU O MÉTODO. ELE FICOU FAMOSO.”",
+          "O nome dela era Bertha Pappenheim, tratada pelo médico Josef Breuer sob o codinome “Anna O.” — caso fundador, citado depois por Freud. Ela batizou as próprias sessões de “talking cure” e “limpeza de chaminé”: falar sobre a lembrança, em detalhe, aliviava o sintoma físico.",
+          "O detalhe que quase ninguém conta: Bertha nunca “curou” de forma limpa como o relato clássico sugere — teve recaídas, internação. Mas se reergueu, e décadas depois virou uma das pioneiras do movimento pelos direitos das mulheres judias na Alemanha, fundando organizações que existiram por décadas.",
+          "CUT::Corte — retrato de época + o nome real dela em destaque na tela",
+          "APLICAÇÃO REAL: A história real de Bertha não é “ela superou e ficou perfeita”. É: o processo não é linear, tem volta, e mesmo assim dá pra reconstruir uma vida com propósito depois. Colocar em palavras o que doeu — de verdade, com detalhe, não resumido — ainda é o primeiro passo que ela descobriu sozinha, há mais de 140 anos.",
+          "CTA::Divorciei! E agora?::Reconstruir identidade depois de um colapso não é uma linha reta pra ninguém, nem foi pra ela. Se você tá nesse meio de campo agora, “Divorciei! E Agora?” traz os primeiros passos pra se reencontrar depois que tudo muda. Link aqui embaixo.",
+          "FECHAMENTO: Comenta se você já tinha ouvido falar de Bertha Pappenheim antes de hoje.",
+          "THUMB::Retrato histórico em tom sépia + texto grande “ELA INVENTOU A TERAPIA MODERNA E SUMIU DA HISTÓRIA”.",
+        ],
+      },
+      {
+        type: "Reflexão",
+        title: "A pergunta que ninguém faz até quebrar o mesmo padrão pela 4ª vez",
+        hook: "Não é azar. Repara: quantas vezes você já disse “de novo não” pro mesmo tipo de escolha?",
+        ebook: "A Boa Moça Morreu",
+        body: [
+          "GANCHO (0:00–0:08): Uma pergunta só, hoje. Sem estudo, sem nome difícil. Só uma pergunta que eu quero que você leve com você o dia inteiro.",
+          "CUT::Texto na tela em destaque: “DE QUEM VOCÊ APRENDEU QUE ERA ASSIM QUE FUNCIONAVA?”",
+          "Repara nos padrões que se repetem na sua vida — o mesmo tipo de parceiro, a mesma forma de sabotar quando as coisas vão bem, a mesma dificuldade de dizer não. A gente costuma chamar isso de “azar” ou “sina”.",
+          "Mas padrão que se repete não é maldição. É script. E script tem autor — geralmente alguém antes de você, que aprendeu na marra e passou adiante sem nem perceber que estava ensinando.",
+          "CUT::Pausa dramática — tela preta com o texto sozinho por 2 segundos",
+          "APLICAÇÃO REAL: Você não escolheu esse script. Mas só você pode reescrever ele daqui pra frente. Não precisa culpar quem veio antes — precisa só parar de repetir por hábito o que nunca foi realmente seu.",
+          "CTA::A Boa Moça Morreu::E um dos scripts mais passados de geração em geração é o de agradar todo mundo antes de si mesma. Se essa é a herança que pesa em você, “A Boa Moça Morreu” fala exatamente sobre isso: ser levada a sério começa onde termina a vontade de agradar. Link aqui embaixo.",
+          "FECHAMENTO: Responde só pra você mesma, nem precisa comentar: de quem você aprendeu isso?",
+          "THUMB::Fundo escuro, uma única frase centralizada em branco: “ESSE PADRÃO É SEU MESMO, OU É HERANÇA?”",
+        ],
+      },
+    ],
+  },
+];
+const EBOOKS = [
+  { title: "Chega — de uma vida sem graça", pitch: "Método V.I.D.A.: 4 passos pra sair do automático e voltar a viver com intenção, com estrutura, não força de vontade." },
+  { title: "Acorde Cedo — Método Lucidez", pitch: "Pare de remar contra sua biologia: ache o horário em que você realmente produz, segundo seu cronotipo." },
+  { title: "Divorciei! E agora?", pitch: "Os primeiros passos pra se reencontrar depois que tudo muda, sem se perder de si." },
+  { title: "A Boa Moça Morreu", pitch: "Ser levada a sério começa onde termina a vontade de agradar todo mundo." },
+];
+// Ordem de uso já consumida nesta semana (4 roteiros = os 4 e-books usados, um cada). O próximo roteiro gerado usa o índice seguinte.
+const EBOOK_USE_COUNT = 4;
+let viewedWeekIndex = WEEKS.length - 1; // semana sendo exibida no momento (clique no histórico troca isso)
+let openDayKeys = new Set(); // dias com o card aberto no momento (persiste entre re-renders; só fecha quando o dia é 100% concluído)
+const LS_KEY = "cura_dashboard_progress_v1";
+const SUPABASE_URL = "https://jlswxyjceluwzdyalwgi.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impsc3d4eWpjZWx1d3pkeWFsd2dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4Mjc3MTgsImV4cCI6MjEwMjQwMzcxOH0.CVgM1g-Xo-Lru7WXTES8ezGy1mNpo-YAKCgjZKWNDBw";
+const SYNC_TABLE = "cura_progress";
+const SYNC_KEY = "tamy"; // chave fixa pessoal — este app é de uso individual
+const supa = (window.supabase && window.supabase.createClient) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+let progressCache = {};
+function loadProgress() { return progressCache; }
+function setSyncStatus(state) {
+  const el = document.getElementById("syncStatus");
+  if (!el) return;
+  if (state === "ok") el.textContent = "☁️ sincronizado entre seus aparelhos";
+  else if (state === "saving") el.textContent = "☁️ salvando...";
+  else if (state === "offline") el.textContent = "⚠️ sem internet — salvo só neste aparelho por enquanto";
+  else el.textContent = "⏳ conectando...";
+}
+async function fetchRemoteProgress() {
+  if (!supa) return null;
+  try {
+    const { data, error } = await supa.from(SYNC_TABLE).select("data").eq("sync_key", SYNC_KEY).maybeSingle();
+    if (error) throw error;
+    return data ? data.data : {};
+  } catch (e) {
+    console.warn("Supabase fetch failed", e);
+    return null;
+  }
+}
+async function pushRemoteProgress(p) {
+  if (!supa) { setSyncStatus("offline"); return; }
+  setSyncStatus("saving");
+  try {
+    const { error } = await supa.from(SYNC_TABLE).upsert({ sync_key: SYNC_KEY, data: p, updated_at: new Date().toISOString() });
+    if (error) throw error;
+    setSyncStatus("ok");
+  } catch (e) {
+    console.warn("Supabase save failed", e);
+    setSyncStatus("offline");
+  }
+}
+function saveProgress(p) {
+  progressCache = p;
+  localStorage.setItem(LS_KEY, JSON.stringify(p));
+  pushRemoteProgress(p);
+}
+async function initProgress() {
+  let local = {};
+  try { local = JSON.parse(localStorage.getItem(LS_KEY)) || {}; } catch (e) { local = {}; }
+  progressCache = local;
+  const remote = await fetchRemoteProgress();
+  if (remote && Object.keys(remote).length) {
+    // remoto existe: mescla (remoto tem prioridade, mas mantém marcações locais que o remoto ainda não tem)
+    progressCache = Object.assign({}, local, remote);
+    localStorage.setItem(LS_KEY, JSON.stringify(progressCache));
+    setSyncStatus("ok");
+  } else if (remote !== null) {
+    // remoto vazio mas alcançável: sobe o que tem local
+    if (Object.keys(local).length) pushRemoteProgress(local);
+    setSyncStatus("ok");
+  } else {
+    setSyncStatus("offline");
+  }
+  render();
+}
+function dayKey(weekNum, idx, sub) { return `w${weekNum}_d${idx}_${sub}`; }
+const SUBTASKS = [
+  "Ler sobre o pesquisador/terapeuta e o conceito (5 min)",
+  "Entender o estudo ou o método a fundo (10 min)",
+  "Escrever 1 aplicação prática pra sua própria vida (5 min)",
+];
+function render() {
+  const progress = loadProgress();
+  const week = WEEKS[viewedWeekIndex];
+  document.getElementById("weekTitle").textContent = `Semana ${week.number}`;
+  document.getElementById("weekDates").textContent = week.dateRange;
+  document.getElementById("themeTitle").textContent = week.theme;
+  document.getElementById("themeDesc").textContent = week.themeDesc;
+  const historyBanner = document.getElementById("historyBanner");
+  if (viewedWeekIndex === WEEKS.length - 1) {
+    historyBanner.style.display = "none";
+  } else {
+    historyBanner.style.display = "inline-block";
+    historyBanner.innerHTML = `📖 Vendo o histórico da Semana ${week.number} — <a id="backToCurrentBtn">voltar para a semana atual</a>`;
+    document.getElementById("backToCurrentBtn").addEventListener("click", () => {
+      viewedWeekIndex = WEEKS.length - 1;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+  // days
+  const daysEl = document.getElementById("days");
+  daysEl.innerHTML = "";
+  let doneCount = 0;
+  week.days.forEach((d, idx) => {
+    const subDone = SUBTASKS.map((_, si) => !!progress[dayKey(week.number, idx, si)]);
+    const complete = subDone.every(Boolean);
+    if (complete) doneCount++;
+    const repChecked = !!progress[`w${week.number}_d${idx}_rep`];
+    const cardKey = `${week.number}_${idx}`;
+    const card = document.createElement("div");
+    card.dataset.cardKey = cardKey;
+    card.className = "day-card" + (complete ? " done" : "") + (openDayKeys.has(cardKey) ? " open" : "");
+    card.innerHTML = `
+      <div class="day-head" data-toggle>
+        <div class="day-head-left">
+          <div class="day-badge">${complete ? "✓" : d.date.split(" ")[0]}</div>
+          <div>
+            <div class="day-title">${d.day} · ${d.topic}</div>
+            <div class="day-sci">${d.scientist}</div>
+          </div>
+        </div>
+        <div class="chev">▾</div>
+      </div>
+      <div class="day-body">
+        <div class="quote">“${d.quote}”<small>${d.quoteNote}</small></div>
+        <div class="mini-label">🧠 Quem é ${d.scientist}</div>
+        <div class="exp-text">${d.scientistBio}</div>
+        <div class="exp-title" style="margin-top:16px;">${d.experimentTitle}</div>
+        <div class="mini-label">🔬 Método</div>
+        <div class="exp-text">${d.method}</div>
+        <div class="mini-label">📊 O que descobriram</div>
+        <div class="exp-text">${d.experimentText}</div>
+        <div class="apply"><b>Aplicação real:</b> ${d.apply}</div>
+        <div class="checklist">
+          ${SUBTASKS.map((t, si) => `
+            <label class="check-item ${subDone[si] ? "checked" : ""}">
+              <input type="checkbox" data-week="${week.number}" data-day="${idx}" data-sub="${si}" ${subDone[si] ? "checked" : ""}>
+              <span>${t}</span>
+            </label>`).join("")}
+        </div>
+        ${d.repertoire ? `
+        <div class="repertoire-box">
+          <div class="rep-head">
+            <span class="repertoire-cat">🔭 Repertório extra · ${d.repertoire.category}</span>
+          </div>
+          <div class="repertoire-title">${d.repertoire.title}</div>
+          <div class="repertoire-text">${d.repertoire.text}</div>
+          <label class="rep-check ${repChecked ? "checked" : ""}">
+            <input type="checkbox" data-rep-week="${week.number}" data-rep-day="${idx}" ${repChecked ? "checked" : ""}>
+            <span>Já vi essa (bônus, ~2 min, não conta pra evolução do estudo)</span>
+          </label>
+        </div>` : ""}
+      </div>`;
+    daysEl.appendChild(card);
+  });
+  document.getElementById("statDaysWeek").textContent = `${doneCount}/5`;
+  document.getElementById("weekProgressBar").style.width = `${(doneCount/5)*100}%`;
+  // totals across all weeks
+  let totalDays = 0, totalScripts = 0, completeWeeksStreak = 0;
+  let streakBroken = false;
+  for (let i = WEEKS.length - 1; i >= 0; i--) {
+    const w = WEEKS[i];
+    let wDone = 0;
+    w.days.forEach((d, idx) => {
+      const complete = SUBTASKS.every((_, si) => !!progress[dayKey(w.number, idx, si)]);
+      if (complete) { wDone++; totalDays++; }
+    });
+    if (w.scriptsReady) totalScripts += w.scripts.length;
+    if (!streakBroken && wDone === 5 && w.scriptsReady) completeWeeksStreak++;
+    else if (wDone < 5) streakBroken = true;
+  }
+  document.getElementById("statStreak").textContent = completeWeeksStreak;
+  document.getElementById("statTotalDays").textContent = totalDays;
+  document.getElementById("statScripts").textContent = totalScripts;
+  // friday block
+  const fb = document.getElementById("fridayBlock");
+  if (!week.scriptsReady) {
+    fb.innerHTML = `
+      <div class="friday">
+        <div class="friday-head">
+          <div><b>Roteiros da Semana ${week.number}</b></div>
+          <span class="badge-status badge-wait">Aguardando sexta</span>
+        </div>
+        <p style="font-size:13px;color:var(--sub);margin-top:8px;">Assim que os 5 dias de estudo forem concluídos, os 3 roteiros de 10 minutos aparecem aqui automaticamente na sexta-feira.</p>
+      </div>`;
+  } else {
+    fb.innerHTML = `
+      <div class="friday">
+        <div class="friday-head">
+          <div><b>Roteiros da Semana ${week.number}</b> — gravar sábado</div>
+          <span class="badge-status badge-ready">Prontos</span>
+        </div>
+        <div id="scriptCards"></div>
+      </div>`;
+    const sc = fb.querySelector("#scriptCards");
+    week.scripts.forEach((s, si) => {
+      const card = document.createElement("div");
+      card.className = "script-card";
+      const bodyHtml = s.body.map(line => {
+        if (line.startsWith("CUT::")) return `<div class="cut">✂ ${line.replace("CUT::","")}</div>`;
+        if (line.startsWith("CTA::")) {
+          const [, title, text] = line.split("::");
+          return `<div class="cta-box"><b>📗 Indicação de e-book — ${title}</b><br>${text}</div>`;
+        }
+        if (line.startsWith("THUMB::")) return `<div class="thumb-box"><b>🖼 Thumbnail sugerida:</b> ${line.replace("THUMB::","")}</div>`;
+        return `<p style="margin:8px 0;">${line}</p>`;
+      }).join("");
+      card.innerHTML = `
+        <div class="script-top" data-toggle>
+          <div>
+            <span class="script-type">${s.type}</span>
+            <div class="script-title">${s.title}</div>
+            <div class="script-hook">${s.hook}</div>
+          </div>
+          <div class="chev">▾</div>
+        </div>
+        <div class="script-body">${bodyHtml}</div>`;
+      sc.appendChild(card);
+    });
+  }
+  // ebooks
+  const eg = document.getElementById("ebookGrid");
+  eg.innerHTML = "";
+  const nextIdx = EBOOK_USE_COUNT % EBOOKS.length;
+  EBOOKS.forEach((e, i) => {
+    const div = document.createElement("div");
+    div.className = "ebook-card" + (i === nextIdx ? " next" : "");
+    div.innerHTML = `${i === nextIdx ? '<div class="ebook-tag">Próximo CTA</div>' : ""}<div class="ebook-title">${e.title}</div><div class="ebook-pitch">${e.pitch}</div>`;
+    eg.appendChild(div);
+  });
+  // history
+  const hb = document.getElementById("historyBody");
+  hb.innerHTML = "";
+  WEEKS.map((w, i) => ({ w, i })).reverse().forEach(({ w, i }) => {
+    let wDone = 0;
+    w.days.forEach((d, idx) => { if (SUBTASKS.every((_, si) => !!progress[dayKey(w.number, idx, si)])) wDone++; });
+    const tr = document.createElement("tr");
+    tr.dataset.idx = i;
+    if (i === viewedWeekIndex) tr.classList.add("viewing");
+    tr.innerHTML = `
+      <td>Semana ${w.number}${i === viewedWeekIndex ? " 👁" : ""}</td>
+      <td>${w.theme}</td>
+      <td><span class="pill ${wDone===5?"pill-ok":"pill-mid"}">${wDone}/5 dias</span></td>
+      <td><span class="pill ${w.scriptsReady?"pill-ok":"pill-mid"}">${w.scriptsReady ? w.scripts.length+" gerados" : "pendente"}</span></td>`;
+    hb.appendChild(tr);
+  });
+  hb.querySelectorAll("tr[data-idx]").forEach(tr => {
+    tr.addEventListener("click", () => {
+      viewedWeekIndex = parseInt(tr.dataset.idx, 10);
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+  // toggles
+  document.querySelectorAll(".day-head[data-toggle]").forEach(el => {
+    el.addEventListener("click", () => {
+      const card = el.closest(".day-card");
+      card.classList.toggle("open");
+      const key = card.dataset.cardKey;
+      if (card.classList.contains("open")) openDayKeys.add(key);
+      else openDayKeys.delete(key);
+    });
+  });
+  document.querySelectorAll(".script-top[data-toggle]").forEach(el => {
+    el.addEventListener("click", () => el.closest(".script-card").classList.toggle("open"));
+  });
+  document.querySelectorAll(".checklist input").forEach(inp => {
+    inp.addEventListener("click", (e) => e.stopPropagation());
+    inp.addEventListener("change", () => {
+      const p = loadProgress();
+      const k = dayKey(inp.dataset.week, inp.dataset.day, inp.dataset.sub);
+      p[k] = inp.checked;
+      saveProgress(p);
+      // mantém o card aberto enquanto o dia não estiver 100% concluído; só fecha quando finalizar
+      const cardKey = `${inp.dataset.week}_${inp.dataset.day}`;
+      const allDone = SUBTASKS.every((_, si) => !!p[dayKey(inp.dataset.week, inp.dataset.day, si)]);
+      if (allDone) openDayKeys.delete(cardKey);
+      else openDayKeys.add(cardKey);
+      render();
+    });
+  });
+  document.querySelectorAll(".rep-check input").forEach(inp => {
+    inp.addEventListener("click", (e) => e.stopPropagation());
+    inp.addEventListener("change", () => {
+      const p = loadProgress();
+      p[`w${inp.dataset.repWeek}_d${inp.dataset.repDay}_rep`] = inp.checked;
+      saveProgress(p);
+      const cardKey = `${inp.dataset.repWeek}_${inp.dataset.repDay}`;
+      const allDone = SUBTASKS.every((_, si) => !!p[dayKey(inp.dataset.repWeek, inp.dataset.repDay, si)]);
+      if (!allDone) openDayKeys.add(cardKey);
+      render();
+    });
+  });
+}
+document.getElementById("refreshBtn").addEventListener("click", async () => {
+  setSyncStatus("connecting");
+  const remote = await fetchRemoteProgress();
+  if (remote !== null) {
+    progressCache = remote;
+    localStorage.setItem(LS_KEY, JSON.stringify(progressCache));
+    setSyncStatus("ok");
+    render();
+  } else {
+    setSyncStatus("offline");
+  }
+});
+initProgress();
+</script>
+</body>
+</html>
