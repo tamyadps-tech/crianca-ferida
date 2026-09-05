@@ -91,6 +91,8 @@
   .cta-box b { color: var(--orange); }
   .reflection-box { font-style: italic; background: #EFF5F2; border-left: 3px solid var(--green); padding: 10px 12px; border-radius: 6px; margin: 10px 0; font-size: 13.5px; }
   .solution-item { background: #FBF8F2; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; margin: 6px 0; font-size: 13px; }
+  .evidence-box { background: #F0F2F8; border: 1px solid #C9CFE3; border-radius: 8px; padding: 8px 12px; margin: 10px 0; font-size: 12.5px; color: var(--sub); }
+  .evidence-box b { color: #4A5580; }
   .thumb-box { background: #F3F0EA; border-radius: 8px; padding: 10px 12px; font-size: 12.5px; color: var(--sub); }
   table.history { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
   table.history th { text-align: left; color: var(--sub); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; padding: 6px 8px; border-bottom: 1px solid var(--line); }
@@ -264,6 +266,7 @@ const WEEKS = [
           "O estudo chama Bucharest Early Intervention Project — pesquisadores como Charles Nelson e Charles Zeanah compararam crianças que ficaram no orfanato com outras que foram pra família adotiva ainda pequenas.",
           "Quem ficou institucionalizado por mais tempo mostrou, no exame, áreas do cérebro fisicamente menores — ligadas a emoção e atenção. Quanto mais cedo a criança saía pra uma família com colo de verdade, mais o cérebro se recuperava.",
           "CUT::Texto na tela: “COLO NÃO É MIMO. É DESENVOLVIMENTO.”",
+          "EVIDÊNCIA::Experimento Científico::Bucharest Early Intervention Project (Nelson, Zeanah & Fox), publicado na revista Science (2007) e em estudos de acompanhamento nas décadas seguintes — comparação controlada entre crianças institucionalizadas e crianças transferidas pra acolhimento familiar, com exame de imagem cerebral em ambos os grupos.",
           "REFLEXÃO: E se parar pra pensar, muita gente adulta vive uma versão mais leve disso — aprendeu cedo demais a se virar sozinha, a não pedir colo porque “não tinha ninguém disponível mesmo”, e hoje sente estranho quando alguém oferece cuidado de verdade. Não é frieza. É um corpo que aprendeu, na prática, que esperar apoio não compensava.",
           "SOLUÇÃO 1: Pratique receber, não só dar — da próxima vez que alguém oferecer ajuda ou colo (literal ou figurado), resista ao “não precisa, eu dou conta” automático, mesmo que dê desconforto.",
           "SOLUÇÃO 2: Nomeie a necessidade em voz alta antes que vire cobrança silenciosa — trocar “ele devia perceber que eu preciso de atenção” por “eu preciso de atenção agora, pode ficar comigo um pouco?”.",
@@ -283,6 +286,7 @@ const WEEKS = [
           "Chama Situação Estranha, criada por Mary Ainsworth nos anos 60/70, colaboradora de John Bowlby. Ela colocava bebê e mãe numa sala, a mãe saía uns minutos, voltava — e filmava a reação NO REENCONTRO, não no choro da saída.",
           "Bebê seguro se acalmava rápido. Bebê ansioso continuava grudado, sem se acalmar nem com a mãe de volta. Bebê evitativo parecia nem ligar — só que o coração dele, medido, disparava igual por dentro. Só não aparecia.",
           "CUT::Corte — comparação visual dos 3 padrões, um texto curto pra cada",
+          "EVIDÊNCIA::Experimento Científico::A Situação Estranha (Mary Ainsworth, 1969), consolidada no livro “Patterns of Attachment” (Ainsworth, Blehar, Waters & Wall, 1978) — protocolo observacional controlado, replicado em centenas de estudos de apego desde então.",
           "REFLEXÃO: O ponto não é o rótulo. É que o padrão de apego não é “jeito de ser” — é estratégia que fez sentido com quem cuidou de você, e continua rodando hoje mesmo sem sentido. É como usar casaco pesado em pleno verão porque uma vez, há muito tempo, você passou frio. Rótulo de TikTok sem essa parte é só horóscopo com palavra difícil.",
           "SOLUÇÃO 1: Antes de mandar a 4ª mensagem seguida ou de já começar a se afastar, faz uma pausa de 10 segundos e pergunta: isso é a situação de agora, ou é o padrão antigo reagindo por mim?",
           "SOLUÇÃO 2: Nomeie o padrão em voz alta pro outro, em vez de só agir a partir dele — “percebi que fico ansiosa quando você demora a responder, isso é meu, não é sobre você” muda a relação de reação automática pra escolha consciente.",
@@ -302,6 +306,7 @@ const WEEKS = [
           "O nome dela era Bertha Pappenheim, tratada pelo médico Josef Breuer sob o codinome “Anna O.” — caso fundador, citado depois por Freud. Ela batizou as próprias sessões de “talking cure” e “limpeza de chaminé”: falar sobre a lembrança, em detalhe, aliviava o sintoma físico.",
           "O detalhe que quase ninguém conta: Bertha nunca “curou” de forma limpa como o relato clássico sugere — teve recaídas, internação. Mas se reergueu, e décadas depois virou uma das pioneiras do movimento pelos direitos das mulheres judias na Alemanha, fundando organizações que existiram por décadas.",
           "CUT::Corte — retrato de época + o nome real dela em destaque na tela",
+          "EVIDÊNCIA::Artigo Científico::O caso está documentado em “Estudos sobre a Histeria” (Josef Breuer & Sigmund Freud, 1895) — o relato clínico original do caso “Anna O.”, hoje reconhecido como um dos registros fundadores da psicoterapia moderna.",
           "REFLEXÃO: A história real de Bertha não é “ela superou e ficou perfeita”. É: o processo não é linear, tem volta, e mesmo assim dá pra reconstruir uma vida com propósito depois. A gente quer que reconstruir a própria vida seja uma linha reta, tipo receita de bolo — e quando não é, acha que fez errado. Não fez.",
           "SOLUÇÃO 1: Colocar em palavras o que doeu, de verdade e com detalhe (escrito ou falado, não precisa ser pra alguém) — foi o primeiro passo que Bertha descobriu sozinha, há mais de 140 anos, e continua funcionando.",
           "SOLUÇÃO 2: Trate a recaída como parte do mapa, não como prova de fracasso — Bertha teve internação depois de melhorar, e mesmo assim reconstruiu uma vida inteira com propósito depois.",
@@ -321,6 +326,8 @@ const WEEKS = [
           "Repara nos padrões que se repetem na sua vida — o mesmo tipo de parceiro, a mesma forma de sabotar quando as coisas vão bem, a mesma dificuldade de dizer não. A gente costuma chamar isso de “azar” ou “sina”.",
           "Mas padrão que se repete não é maldição. É script. E script tem autor — geralmente alguém antes de você, que aprendeu na marra e passou adiante sem nem perceber que estava ensinando.",
           "CUT::Pausa dramática — tela preta com o texto sozinho por 2 segundos",
+          "E isso não é só força de expressão. A pesquisadora Rachel Yehuda, do Icahn School of Medicine at Mount Sinai, estudou filhos de sobreviventes do Holocausto e encontrou marcadores epigenéticos alterados — ligados à regulação do estresse — no corpo dessa segunda geração, publicado no American Journal of Psychiatry (2014). Herança de padrão, às vezes, tem até marca biológica mensurável.",
+          "EVIDÊNCIA::Artigo Científico::Yehuda et al., “Influences of Maternal and Paternal PTSD on Epigenetic Regulation of the Glucocorticoid Receptor Gene in Holocaust Survivor Offspring”, American Journal of Psychiatry (2014).",
           "REFLEXÃO: Você não escolheu esse script. Mas só você pode reescrever ele daqui pra frente. Não precisa culpar quem veio antes — precisa só parar de repetir por hábito o que nunca foi realmente seu.",
           "SOLUÇÃO 1: Escreve a resposta da pergunta sem filtro, de quem você aprendeu que era assim que funcionava — mãe, pai, avó — só pra ver, com clareza, se é seu mesmo ou herdado.",
           "SOLUÇÃO 2: Da próxima vez que sentir o padrão disparando, faz diferente uma vez só, mesmo pequeno — não precisa reescrever a vida inteira hoje, só provar pro seu próprio corpo que dá pra reagir diferente.",
@@ -536,6 +543,10 @@ function render() {
           return `<div class="cta-box"><b>📗 Indicação de e-book — ${title}</b><br>${text}</div>`;
         }
         if (line.startsWith("THUMB::")) return `<div class="thumb-box"><b>🖼 Thumbnail sugerida:</b> ${line.replace("THUMB::","")}</div>`;
+        if (line.startsWith("EVIDÊNCIA::")) {
+          const [, tipo, texto] = line.split("::");
+          return `<div class="evidence-box"><b>🔎 ${tipo}:</b> ${texto}</div>`;
+        }
         if (line.startsWith("REFLEXÃO:")) return `<div class="reflection-box">💭 ${line.replace("REFLEXÃO:","")}</div>`;
         if (/^SOLUÇÃO \d+:/.test(line)) return `<div class="solution-item">✅ ${line}</div>`;
         return `<p style="margin:8px 0;">${line}</p>`;
