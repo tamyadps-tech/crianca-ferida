@@ -89,6 +89,8 @@
   .cut { color: var(--red); font-weight: 700; font-style: italic; font-size: 12.5px; margin: 8px 0; }
   .cta-box { background: var(--cream); border: 1px solid var(--gold); border-radius: 8px; padding: 10px 12px; margin: 10px 0; font-size: 13px; }
   .cta-box b { color: var(--orange); }
+  .reflection-box { font-style: italic; background: #EFF5F2; border-left: 3px solid var(--green); padding: 10px 12px; border-radius: 6px; margin: 10px 0; font-size: 13.5px; }
+  .solution-item { background: #FBF8F2; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; margin: 6px 0; font-size: 13px; }
   .thumb-box { background: #F3F0EA; border-radius: 8px; padding: 10px 12px; font-size: 12.5px; color: var(--sub); }
   table.history { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
   table.history th { text-align: left; color: var(--sub); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; padding: 6px 8px; border-bottom: 1px solid var(--line); }
@@ -262,7 +264,9 @@ const WEEKS = [
           "O estudo chama Bucharest Early Intervention Project — pesquisadores como Charles Nelson e Charles Zeanah compararam crianças que ficaram no orfanato com outras que foram pra família adotiva ainda pequenas.",
           "Quem ficou institucionalizado por mais tempo mostrou, no exame, áreas do cérebro fisicamente menores — ligadas a emoção e atenção. Quanto mais cedo a criança saía pra uma família com colo de verdade, mais o cérebro se recuperava.",
           "CUT::Texto na tela: “COLO NÃO É MIMO. É DESENVOLVIMENTO.”",
-          "APLICAÇÃO REAL: Isso não é só sobre orfanato. É sobre a ideia, ainda comum, de que criança “só precisa de comida e teto” — e afeto é enfeite. A ciência mostra o oposto: falta de vínculo muda estrutura física de cérebro em formação.",
+          "REFLEXÃO: E se parar pra pensar, muita gente adulta vive uma versão mais leve disso — aprendeu cedo demais a se virar sozinha, a não pedir colo porque “não tinha ninguém disponível mesmo”, e hoje sente estranho quando alguém oferece cuidado de verdade. Não é frieza. É um corpo que aprendeu, na prática, que esperar apoio não compensava.",
+          "SOLUÇÃO 1: Pratique receber, não só dar — da próxima vez que alguém oferecer ajuda ou colo (literal ou figurado), resista ao “não precisa, eu dou conta” automático, mesmo que dê desconforto.",
+          "SOLUÇÃO 2: Nomeie a necessidade em voz alta antes que vire cobrança silenciosa — trocar “ele devia perceber que eu preciso de atenção” por “eu preciso de atenção agora, pode ficar comigo um pouco?”.",
           "CTA::Chega — de uma vida sem graça::E se você cresceu tendo que se virar sozinha emocionalmente cedo demais, faz sentido que hoje seja difícil desacelerar e sentir — não é falha sua, é biologia se ajustando tarde. O “Chega” te ajuda a sair do automático com estrutura, não força de vontade. Link na descrição.",
           "FECHAMENTO: Comenta “colo” se isso te fez pensar em alguém da sua infância.",
           "THUMB::Foto documental estilizada de berço vazio + texto grande “ISSO MUDA O CÉREBRO DE UMA CRIANÇA”.",
@@ -279,7 +283,9 @@ const WEEKS = [
           "Chama Situação Estranha, criada por Mary Ainsworth nos anos 60/70, colaboradora de John Bowlby. Ela colocava bebê e mãe numa sala, a mãe saía uns minutos, voltava — e filmava a reação NO REENCONTRO, não no choro da saída.",
           "Bebê seguro se acalmava rápido. Bebê ansioso continuava grudado, sem se acalmar nem com a mãe de volta. Bebê evitativo parecia nem ligar — só que o coração dele, medido, disparava igual por dentro. Só não aparecia.",
           "CUT::Corte — comparação visual dos 3 padrões, um texto curto pra cada",
-          "APLICAÇÃO REAL: O ponto não é o rótulo. É que o padrão de apego não é “jeito de ser” — é estratégia que fez sentido com quem cuidou de você, e continua rodando hoje mesmo sem sentido. Rótulo de TikTok sem essa parte é só horóscopo com palavra difícil.",
+          "REFLEXÃO: O ponto não é o rótulo. É que o padrão de apego não é “jeito de ser” — é estratégia que fez sentido com quem cuidou de você, e continua rodando hoje mesmo sem sentido. É como usar casaco pesado em pleno verão porque uma vez, há muito tempo, você passou frio. Rótulo de TikTok sem essa parte é só horóscopo com palavra difícil.",
+          "SOLUÇÃO 1: Antes de mandar a 4ª mensagem seguida ou de já começar a se afastar, faz uma pausa de 10 segundos e pergunta: isso é a situação de agora, ou é o padrão antigo reagindo por mim?",
+          "SOLUÇÃO 2: Nomeie o padrão em voz alta pro outro, em vez de só agir a partir dele — “percebi que fico ansiosa quando você demora a responder, isso é meu, não é sobre você” muda a relação de reação automática pra escolha consciente.",
           "CTA::Acorde Cedo — Método Lucidez::E se seu padrão é chegar exausta até pra sentir isso direito, o problema pode nem ser emocional, pode ser hora errada do dia — “Acorde Cedo” te ajuda a achar seu horário real de energia, pelo cronotipo. Link aqui embaixo.",
           "FECHAMENTO: Comenta qual dos 3 você reconheceu em você — seguro, ansioso ou evitativo.",
           "THUMB::Split screen: print de celular estilo TikTok de um lado, foto em preto e branco de estudo científico do outro + texto “A CIÊNCIA POR TRÁS DO TREND”.",
@@ -296,7 +302,9 @@ const WEEKS = [
           "O nome dela era Bertha Pappenheim, tratada pelo médico Josef Breuer sob o codinome “Anna O.” — caso fundador, citado depois por Freud. Ela batizou as próprias sessões de “talking cure” e “limpeza de chaminé”: falar sobre a lembrança, em detalhe, aliviava o sintoma físico.",
           "O detalhe que quase ninguém conta: Bertha nunca “curou” de forma limpa como o relato clássico sugere — teve recaídas, internação. Mas se reergueu, e décadas depois virou uma das pioneiras do movimento pelos direitos das mulheres judias na Alemanha, fundando organizações que existiram por décadas.",
           "CUT::Corte — retrato de época + o nome real dela em destaque na tela",
-          "APLICAÇÃO REAL: A história real de Bertha não é “ela superou e ficou perfeita”. É: o processo não é linear, tem volta, e mesmo assim dá pra reconstruir uma vida com propósito depois. Colocar em palavras o que doeu — de verdade, com detalhe, não resumido — ainda é o primeiro passo que ela descobriu sozinha, há mais de 140 anos.",
+          "REFLEXÃO: A história real de Bertha não é “ela superou e ficou perfeita”. É: o processo não é linear, tem volta, e mesmo assim dá pra reconstruir uma vida com propósito depois. A gente quer que reconstruir a própria vida seja uma linha reta, tipo receita de bolo — e quando não é, acha que fez errado. Não fez.",
+          "SOLUÇÃO 1: Colocar em palavras o que doeu, de verdade e com detalhe (escrito ou falado, não precisa ser pra alguém) — foi o primeiro passo que Bertha descobriu sozinha, há mais de 140 anos, e continua funcionando.",
+          "SOLUÇÃO 2: Trate a recaída como parte do mapa, não como prova de fracasso — Bertha teve internação depois de melhorar, e mesmo assim reconstruiu uma vida inteira com propósito depois.",
           "CTA::Divorciei! E agora?::Reconstruir identidade depois de um colapso não é uma linha reta pra ninguém, nem foi pra ela. Se você tá nesse meio de campo agora, “Divorciei! E Agora?” traz os primeiros passos pra se reencontrar depois que tudo muda. Link aqui embaixo.",
           "FECHAMENTO: Comenta se você já tinha ouvido falar de Bertha Pappenheim antes de hoje.",
           "THUMB::Retrato histórico em tom sépia + texto grande “ELA INVENTOU A TERAPIA MODERNA E SUMIU DA HISTÓRIA”.",
@@ -313,7 +321,9 @@ const WEEKS = [
           "Repara nos padrões que se repetem na sua vida — o mesmo tipo de parceiro, a mesma forma de sabotar quando as coisas vão bem, a mesma dificuldade de dizer não. A gente costuma chamar isso de “azar” ou “sina”.",
           "Mas padrão que se repete não é maldição. É script. E script tem autor — geralmente alguém antes de você, que aprendeu na marra e passou adiante sem nem perceber que estava ensinando.",
           "CUT::Pausa dramática — tela preta com o texto sozinho por 2 segundos",
-          "APLICAÇÃO REAL: Você não escolheu esse script. Mas só você pode reescrever ele daqui pra frente. Não precisa culpar quem veio antes — precisa só parar de repetir por hábito o que nunca foi realmente seu.",
+          "REFLEXÃO: Você não escolheu esse script. Mas só você pode reescrever ele daqui pra frente. Não precisa culpar quem veio antes — precisa só parar de repetir por hábito o que nunca foi realmente seu.",
+          "SOLUÇÃO 1: Escreve a resposta da pergunta sem filtro, de quem você aprendeu que era assim que funcionava — mãe, pai, avó — só pra ver, com clareza, se é seu mesmo ou herdado.",
+          "SOLUÇÃO 2: Da próxima vez que sentir o padrão disparando, faz diferente uma vez só, mesmo pequeno — não precisa reescrever a vida inteira hoje, só provar pro seu próprio corpo que dá pra reagir diferente.",
           "CTA::A Boa Moça Morreu::E um dos scripts mais passados de geração em geração é o de agradar todo mundo antes de si mesma. Se essa é a herança que pesa em você, “A Boa Moça Morreu” fala exatamente sobre isso: ser levada a sério começa onde termina a vontade de agradar. Link aqui embaixo.",
           "FECHAMENTO: Responde só pra você mesma, nem precisa comentar: de quem você aprendeu isso?",
           "THUMB::Fundo escuro, uma única frase centralizada em branco: “ESSE PADRÃO É SEU MESMO, OU É HERANÇA?”",
@@ -526,6 +536,8 @@ function render() {
           return `<div class="cta-box"><b>📗 Indicação de e-book — ${title}</b><br>${text}</div>`;
         }
         if (line.startsWith("THUMB::")) return `<div class="thumb-box"><b>🖼 Thumbnail sugerida:</b> ${line.replace("THUMB::","")}</div>`;
+        if (line.startsWith("REFLEXÃO:")) return `<div class="reflection-box">💭 ${line.replace("REFLEXÃO:","")}</div>`;
+        if (/^SOLUÇÃO \d+:/.test(line)) return `<div class="solution-item">✅ ${line}</div>`;
         return `<p style="margin:8px 0;">${line}</p>`;
       }).join("");
       card.innerHTML = `
